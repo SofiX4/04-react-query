@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import css from "./App.module.css";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import SearchBar from "../SearchBar/SearchBar";
 import MovieGrid from "../MovieGrid/MovieGrid";
 import Loader from "../Loader/Loader";
@@ -22,6 +22,12 @@ export default function App() {
     enabled: query.trim().length > 0,
     placeholderData: keepPreviousData,
   });
+
+  useEffect(() => {
+    if (data && data.results.length === 0) {
+      toast.error("No movies found for your request.");
+    }
+  }, [data]);
 
   const handleSearch = async (newQuery: string) => {
     setQuery(newQuery);
